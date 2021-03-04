@@ -31,13 +31,22 @@ const questions = [
 ]
 
 
-const newTeamMember =
-{
-    type: "list",
-    name: "teamMember",
-    message: "Now, select a team member that needs to be added",
-    choices: ["Manager", "Engineer", "Intern", "None"]
-}
+const newTeamMember = [
+    {
+        type: "confirm",
+        name: "booleanValue",
+        message: "Do you need to add another employee?",
+    },
+
+    {
+        type: "list",
+        name: "teamMember",
+        message: "Select a team member that needs to be added",
+        choices: ["Engineer", "Intern", "None"]
+    }
+]
+
+
 startApp();
 function startApp() {
     console.log("As application started, introduce Manager's info first")
