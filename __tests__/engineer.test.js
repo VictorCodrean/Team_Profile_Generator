@@ -1,9 +1,13 @@
-//  office hours advises
+const Engineer = require("../lib/engineer");
 
-// const engineer = require('..lib/engineer.js')
+it("Checking method getGithub username", () => {
+    const username = "Victorcodrean";
+    const exUsernam = new Engineer("whatever", 99, "sample@sample", username);
+    expect(exUsernam.getGithub()).toBe(username);
+});
 
-// test("Checking githug username", () => {
-// const testValue = "username"
-// const engineer = new Engineer("name", "id", "email", testValue) 
-// expect(engineer.getGithub()).toBe(testValue)
-// });
+it("Checking to return 'Engineer' on getRole()", () => {
+    const teamMember = "Engineer";
+    const exTeamMember = new Engineer("whatever", 99, "sample@sample", teamMember);
+    expect(exTeamMember.getRole()).toBe(teamMember);
+});
