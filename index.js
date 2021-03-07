@@ -56,101 +56,12 @@ const newTeamMember = [
     }
 ];
 
-function managerCard(manager) {
-    return `
-<div class="card mb-3" style="background-color: #d9b382 ;">
-    <div class="card-header" style="background-color: #b39064 ; color: aliceblue">Manager</div>
-    <div class="card-body">
-        <h5 class="card-title">${manager.name}</h5>
-        <ul class="list-group">
-            <li class="list-group-item" style="background-color: beige;">ID: ${manager.idNumber}</li>
-            <li class="list-group-item" style="background-color: beige;">Email: <a href="mailto:${manager.emailAddress}">email</a>
-            </li>
-            <li class="list-group-item" style="background-color: beige;">Office number: officeNumber
-            </li>
-        </ul>
-    </div>
-</div>
-`
-}
-
-// function engineerCard(engineers) {
-//     const engineerMembers = "";
-//     engineers.forEach(member => {
-//         const engineerCard = `
-//     <div class="card mb-3" style="background-color: #d9b382 ;">
-//     <div class="card-header" style="background-color: #b39064 ; color: aliceblue">Engineer</div>
-//     <div class="card-body">
-//         <h5 class="card-title">${member.name}</h5>
-//         <ul class="list-group">
-//             <li class="list-group-item" style="background-color: beige;">ID: ${member.idNumber}</li>
-//             <li class="list-group-item" style="background-color: beige;">Email: <a href="mailto:${member.emailAddress}">${member.emailAddress}</a>
-//             </li>
-//             <li class="list-group-item" style="background-color: beige;">Github: ${member.gitHubUsername}
-//             </li>
-//         </ul>
-//     </div>
-//     </div>
-//         `
-//     })
-// }
-
-function generateHTML(teamMembers) {
-
-    var manager = teamMembers[0]
-    var engineers = teamMembers.filter((teamMember) => {
-
-        return teamMember.getRole() === "Engineer"
-    })
-    console.log(engineers);
-
-    return `
-    <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team Profile</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://kit.fontawesome.com/a3b9a0e76d.js" crossorigin="anonymous"></script>
-</head>
-
-<body style="background-color: beige;">
-    <header style="background-color: #e45f56;">
-        <nav class="text-center " style="color:beige;">
-            <img src="../assets/pictures/android-chrome-192x192.png" width="35" height="35"
-                class="d-inline-block mr-2 mb-3" alt="Team profile">
-            <h1 class="d-inline-block mb-0">Team Profile<i class="fas fa-users pl-3"></i></h1>
-        </nav>
-    </header>
-    <div class="container mt-5">
-        <div class="row">
-            <div class="team-area col-12 d-flex justify-content-center">
-            ${managerCard(manager)}
-            ${engineerCard(engineers)}
-
-            </div>
-        </div>
-    </div>
-</body>
-
-</html>
-    `
-}
 startApp();
 function startApp() {
     console.log("As application started, introduce Manager's info first");
     inquirer
         .prompt(questions)
         .then(response => {
-            console.log(`Manager's name: ${response.name}`);
-            console.log(`ID No: ${response.idNumber}`);
-            console.log(`Email address: ${response.emailAddress}`);
-            console.log(`Office Number: ${response.officeNumber}`);
-
             const managerInfo = new Manager(response.name, response.idNumber, response.emailAddress, response.officeNumber);
             teamMembers.push(managerInfo);
             addMember();
@@ -203,7 +114,7 @@ function addEngineer(answerChoosed) {
     inquirer
         .prompt(questions)
         .then(answer => {
-            console.log(answer);
+            // console.log(answer);
             const engineerInfo = new Engineer(answer.name, answer.idNumber, answer.emailAddress, answer.gitHubUsername);
             teamMembers.push(engineerInfo);
             addMember();
@@ -229,7 +140,7 @@ function addIntern(answerChoosed) {
     inquirer
         .prompt(questions)
         .then(answer => {
-            console.log(answer);
+            // console.log(answer);
 
             const internInfo = new Engineer(answer.name, answer.idNumber, answer.emailAddress, answer.schoolName);
             teamMembers.push(internInfo);
@@ -244,3 +155,123 @@ function addIntern(answerChoosed) {
 }
 
 
+function managerCard(manager) {
+    console.log(manager);
+    const htmlManager = `
+    <div class="card mb-3" style="background-color: #d9b382 ;">
+        <div class="card-header" style="background-color: #b39064 ; color: aliceblue">Manager</div>
+        <div class="card-body">
+            <h5 class="card-title">${manager.name}</h5>
+            <ul class="list-group">
+                <li class="list-group-item" style="background-color: beige;">ID: ${manager.id}</li>
+                <li class="list-group-item" style="background-color: beige;">Email: <a href="mailto:${manager.email}">${manager.email}</a>
+                </li>
+                <li class="list-group-item" style="background-color: beige;">Office number: ${manager.officeNumber}
+                </li>
+            </ul>
+         </div>
+    </div>
+    `
+    return htmlManager;
+}
+
+function engineerCard(teamMembers) {
+    const engineersArray = teamMembers.filter((teamMember) => {
+        return teamMember.getRole() === "Engineer"
+    });
+    console.log(engineersArray);
+    const engineerEmployeesHtml = engineersArray.map(member =>
+        `
+        <div class="card mb-3" style="background-color: #d9b382 ;">
+    <div class="card-header" style="background-color: #b39064 ; color: aliceblue">Engineer</div>
+    <div class="card-body">
+        <h5 class="card-title">${member.name}</h5>
+        <ul class="list-group">
+            <li class="list-group-item" style="background-color: beige;">ID: ${member.id}</li>
+            <li class="list-group-item" style="background-color: beige;">Email: <a href="mailto:${member.email}">${member.email}</a>
+            </li>
+            <li class="list-group-item" style="background-color: beige;">Github: ${member.github}
+            </li>
+        </ul>
+    </div>
+    </div>
+        `
+    );
+    const engineerCard = engineerEmployeesHtml.join('');
+    return engineerCard;
+
+    console.log(engineerCard);
+
+}
+
+function generateHTML(teamMembers) {
+    var manager = teamMembers[0]
+
+    return `
+    <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/a3b9a0e76d.js" crossorigin="anonymous"></script>
+</head>
+
+<body style="background-color: beige;">
+    <header style="background-color: #e45f56;">
+        <nav class="text-center " style="color:beige;">
+            <img src="../assets/pictures/android-chrome-192x192.png" width="35" height="35"
+                class="d-inline-block mr-2 mb-3" alt="Team profile">
+            <h1 class="d-inline-block mb-0">Team Profile<i class="fas fa-users pl-3"></i></h1>
+        </nav>
+    </header>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="team-area col-12 d-flex justify-content-center">
+            ${managerCard(manager)}
+            ${engineerCard(teamMembers)}
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+    `
+}
+
+
+
+
+// function engineerCard(teamMembers) {
+//     const engineersArray = teamMembers.filter((teamMember) => {
+//         return teamMember.getRole() === "Engineer"
+//     });
+//     console.log(engineersArray);
+//     engineersArray.forEach(member => {
+//         const engineerEmployeesHtml = `
+//         <div class="card mb-3" style="background-color: #d9b382 ;">
+//     <div class="card-header" style="background-color: #b39064 ; color: aliceblue">Engineer</div>
+//     <div class="card-body">
+//         <h5 class="card-title">${member.name}</h5>
+//         <ul class="list-group">
+//             <li class="list-group-item" style="background-color: beige;">ID: ${member.idNumber}</li>
+//             <li class="list-group-item" style="background-color: beige;">Email: <a href="mailto:${member.emailAddress}">${member.emailAddress}</a>
+//             </li>
+//             <li class="list-group-item" style="background-color: beige;">Github: ${member.gitHubUsername}
+//             </li>
+//         </ul>
+//     </div>
+//     </div>
+//         `
+//         console.log(engineerEmployeesHtml);
+
+//     })
+
+//     // const engineerEmployeesHtml = engineersArray.map(Engineer => )
+
+// }
