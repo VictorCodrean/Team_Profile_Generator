@@ -1,13 +1,13 @@
-<div class="card mb-3" style="background-color: #d9b382 ;">
+<div class="card mb-4 card-hover" style="background-color: #d9b382 ;">
     <div class="card-header" style="background-color: #b39064 ; color: aliceblue">Manager</div>
     <div class="card-body">
-        <h5 class="card-title">{{ name }}</h5>
-        <ul class="list-group">
-            <li class="list-group-item" style="background-color: beige;">ID: id</li>
-            <li class="list-group-item" style="background-color: beige;">Email: <a href="mailto:{{ email }}">email</a>
+        <h5 class="card-title">${manager.name}</h5>
+        <ul class="list-group my-list">
+            <li class="list-group-item" style="background-color: beige;">ID: ${manager.id}</li>
+            <li class="list-group-item" style="background-color: beige;">Email: <a
+                    href="mailto:${manager.email}">${manager.email}</a>
             </li>
-            <li class="list-group-item" style="background-color: beige;">Office number: officeNumber
-            </li>
+            <li class="list-group-item" style="background-color: beige;">Office number: ${manager.officeNumber}</li>
         </ul>
     </div>
 </div>

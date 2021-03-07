@@ -85,7 +85,7 @@ function addMember() {
                 case "Done":
                     // console.log(generateHTML(teamMembers))
 
-                    fs.writeFile("./dist/rendered.html", generateHTML(teamMembers), () => {
+                    fs.writeFile("./dist/rendered2.html", generateHTML(teamMembers), () => {
                         console.log("created")
                     });
                     break;
@@ -142,7 +142,7 @@ function addIntern(answerChoosed) {
         .then(answer => {
             // console.log(answer);
 
-            const internInfo = new Engineer(answer.name, answer.idNumber, answer.emailAddress, answer.schoolName);
+            const internInfo = new Intern(answer.name, answer.idNumber, answer.emailAddress, answer.schoolName);
             teamMembers.push(internInfo);
             addMember();
         });
@@ -154,22 +154,21 @@ function addIntern(answerChoosed) {
     };
 }
 
-
 function managerCard(manager) {
     console.log(manager);
     const htmlManager = `
-    <div class="card mb-3" style="background-color: #d9b382 ;">
+     <div class="card mb-4 card-hover" style="background-color: #d9b382 ;">
         <div class="card-header" style="background-color: #b39064 ; color: aliceblue">Manager</div>
         <div class="card-body">
             <h5 class="card-title">${manager.name}</h5>
-            <ul class="list-group">
+            <ul class="list-group my-list">
                 <li class="list-group-item" style="background-color: beige;">ID: ${manager.id}</li>
-                <li class="list-group-item" style="background-color: beige;">Email: <a href="mailto:${manager.email}">${manager.email}</a>
+                <li class="list-group-item" style="background-color: beige;">Email: <a
+                    href="mailto:${manager.email}">${manager.email}</a>
                 </li>
-                <li class="list-group-item" style="background-color: beige;">Office number: ${manager.officeNumber}
-                </li>
+                <li class="list-group-item" style="background-color: beige;">Office number: ${manager.officeNumber}</li>
             </ul>
-         </div>
+        </div>
     </div>
     `
     return htmlManager;
@@ -180,37 +179,56 @@ function engineerCard(teamMembers) {
         return teamMember.getRole() === "Engineer"
     });
     console.log(engineersArray);
-    const engineerEmployeesHtml = engineersArray.map(member =>
-        `
-        <div class="card mb-3" style="background-color: #d9b382 ;">
-    <div class="card-header" style="background-color: #b39064 ; color: aliceblue">Engineer</div>
-    <div class="card-body">
-        <h5 class="card-title">${member.name}</h5>
-        <ul class="list-group">
-            <li class="list-group-item" style="background-color: beige;">ID: ${member.id}</li>
-            <li class="list-group-item" style="background-color: beige;">Email: <a href="mailto:${member.email}">${member.email}</a>
-            </li>
-            <li class="list-group-item" style="background-color: beige;">Github: ${member.github}
-            </li>
-        </ul>
-    </div>
-    </div>
-        `
+    const engineerEmployeesHtml = engineersArray.map(member => `
+        <div class="card mb-4 card-hover" style="background-color: #d9b382 ;">
+            <div class="card-header" style="background-color: #b39064 ; color: aliceblue">Engineer</div>
+            <div class="card-body">
+                <h5 class="card-title">${member.name}</h5>
+                <ul class="list-group my-list">
+                <li class="list-group-item" style="background-color: beige;">ID: ${member.id}</li>
+                <li class="list-group-item" style="background-color: beige;">Email: <a
+                    href="mailto:${member.email}">${member.email}</a></li>
+                <li class="list-group-item" style="background-color: beige;">Github: ${member.github}</li>
+            </ul>
+            </div>
+        </div>
+    `
     );
     const engineerCard = engineerEmployeesHtml.join('');
     return engineerCard;
-
     console.log(engineerCard);
+}
 
+function internCard(teamMembers) {
+    const internsArray = teamMembers.filter((teamMember) => {
+        return teamMember.getRole() === "Intern"
+    });
+    console.log(internsArray);
+    const internsHtml = internsArray.map(intern => `
+        <div class="card mb-4 card-hover" style="background-color: #d9b382 ;">
+            <div class="card-header" style="background-color: #b39064 ; color: aliceblue">Intern</div>
+            <div class="card-body">
+                <h5 class="card-title">${intern.name}</h5>
+                <ul class="list-group my-list">
+                <li class="list-group-item" style="background-color: beige;">ID: ${intern.id}</li>
+                <li class="list-group-item" style="background-color: beige;">Email: <a
+                    href="mailto:${intern.email}">${intern.email}</a></li>
+                <li class="list-group-item" style="background-color: beige;">School: ${intern.school}</li>
+            </ul>
+            </div>
+        </div>
+    `
+    );
+    const internCard = internsHtml.join('');
+    return internCard;
+    console.log(internCard);
 }
 
 function generateHTML(teamMembers) {
     var manager = teamMembers[0]
-
     return `
     <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -218,9 +236,9 @@ function generateHTML(teamMembers) {
     <title>Team Profile</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/a3b9a0e76d.js" crossorigin="anonymous"></script>
 </head>
-
 <body style="background-color: beige;">
     <header style="background-color: #e45f56;">
         <nav class="text-center " style="color:beige;">
@@ -230,48 +248,17 @@ function generateHTML(teamMembers) {
         </nav>
     </header>
     <div class="container mt-5">
-        <div class="row">
-            <div class="team-area col-12 d-flex justify-content-center">
-            ${managerCard(manager)}
-            ${engineerCard(teamMembers)}
-
+        <div class="row justify-content-center">
+            <div class="col-10 d-flex justify-content-center ">
+                <div class="card-deck ">
+                    ${managerCard(manager)}
+                    ${engineerCard(teamMembers)}
+                    ${internCard(teamMembers)}
+                </div>
             </div>
         </div>
     </div>
 </body>
-
 </html>
     `
 }
-
-
-
-
-// function engineerCard(teamMembers) {
-//     const engineersArray = teamMembers.filter((teamMember) => {
-//         return teamMember.getRole() === "Engineer"
-//     });
-//     console.log(engineersArray);
-//     engineersArray.forEach(member => {
-//         const engineerEmployeesHtml = `
-//         <div class="card mb-3" style="background-color: #d9b382 ;">
-//     <div class="card-header" style="background-color: #b39064 ; color: aliceblue">Engineer</div>
-//     <div class="card-body">
-//         <h5 class="card-title">${member.name}</h5>
-//         <ul class="list-group">
-//             <li class="list-group-item" style="background-color: beige;">ID: ${member.idNumber}</li>
-//             <li class="list-group-item" style="background-color: beige;">Email: <a href="mailto:${member.emailAddress}">${member.emailAddress}</a>
-//             </li>
-//             <li class="list-group-item" style="background-color: beige;">Github: ${member.gitHubUsername}
-//             </li>
-//         </ul>
-//     </div>
-//     </div>
-//         `
-//         console.log(engineerEmployeesHtml);
-
-//     })
-
-//     // const engineerEmployeesHtml = engineersArray.map(Engineer => )
-
-// }
