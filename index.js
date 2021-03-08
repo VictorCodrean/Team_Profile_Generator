@@ -2,6 +2,8 @@
 // fs to write file
 const inquirer = require("inquirer");
 const fs = require("fs");
+const generateHTML = require("./lib/createHTML");
+const generateCSS = require("./lib/createCSS")
 
 // Bringing class modules:
 const Manager = require("./lib/manager");
@@ -10,6 +12,7 @@ const Intern = require("./lib/intern");
 
 // empty array to bring team members information...
 const teamMembers = [];
+
 
 //  WHEN I start the application
 //  THEN I am prompted to enter the team manager’s name, employee ID
@@ -42,11 +45,11 @@ const questions = [
 
 
 const newTeamMember = [
-    {
-        type: "confirm",
-        name: "booleanValue",
-        message: "Do you need to add another employee?",
-    },
+    // {
+    //     type: "confirm",
+    //     name: "booleanValue",
+    //     message: "Do you need to add another employee?",
+    // },
 
     {
         type: "list",
@@ -72,9 +75,18 @@ function startApp() {
 //  and office number THEN I am presented with a menu with the option
 //  to add an engineer or an intern or to finish building my team
 function addMember() {
+    for (var i = 0; i < questions.length; i++) {
+        if (questions[i].name === "officeNumber") {
+            questions.splice(i, 1);
+            break;
+        };
+    };
     inquirer
         .prompt(newTeamMember)
         .then(answer => {
+            // if (!answer.booleanValue) {
+            //     answer.teamMember = "Done"
+            // }
             switch (answer.teamMember) {
                 case "Engineer": addEngineer(answer.teamMember);
                     break;
@@ -85,8 +97,13 @@ function addMember() {
                 case "Done":
                     // console.log(generateHTML(teamMembers))
 
-                    fs.writeFile("./dist/rendered2.html", generateHTML(teamMembers), () => {
-                        console.log("created")
+                    fs.writeFile("./dist/rendered.html", generateHTML(teamMembers), () => {
+
+                        console.log("Html file Successfully generated: Directory --- ./dist/rendered.html")
+                    });
+                    fs.writeFile("./dist/style.css", generateCSS(teamMembers), () => {
+
+                        console.log("CSS file successfully generated: Directory --- ./dist/style.css")
                     });
                     break;
             }
@@ -97,12 +114,7 @@ function addMember() {
 // engineer’s name, ID, email, and GitHub username, and I am taken back
 // to the menu
 function addEngineer(answerChoosed) {
-    for (var i = 0; i < questions.length; i++) {
-        if (questions[i].name === "officeNumber") {
-            questions.splice(i, 1);
-            break;
-        };
-    };
+
     const addEngineerQuestions = {
         type: "input",
         message: `Type in the ${answerChoosed}'s GitHub username: `,
@@ -141,7 +153,6 @@ function addIntern(answerChoosed) {
         .prompt(questions)
         .then(answer => {
             // console.log(answer);
-
             const internInfo = new Intern(answer.name, answer.idNumber, answer.emailAddress, answer.schoolName);
             teamMembers.push(internInfo);
             addMember();
@@ -154,111 +165,3 @@ function addIntern(answerChoosed) {
     };
 }
 
-function managerCard(manager) {
-    console.log(manager);
-    const htmlManager = `
-     <div class="card mb-4 card-hover" style="background-color: #d9b382 ;">
-        <div class="card-header" style="background-color: #b39064 ; color: aliceblue">Manager</div>
-        <div class="card-body">
-            <h5 class="card-title">${manager.name}</h5>
-            <ul class="list-group my-list">
-                <li class="list-group-item" style="background-color: beige;">ID: ${manager.id}</li>
-                <li class="list-group-item" style="background-color: beige;">Email: <a
-                    href="mailto:${manager.email}">${manager.email}</a>
-                </li>
-                <li class="list-group-item" style="background-color: beige;">Office number: ${manager.officeNumber}</li>
-            </ul>
-        </div>
-    </div>
-    `
-    return htmlManager;
-}
-
-function engineerCard(teamMembers) {
-    const engineersArray = teamMembers.filter((teamMember) => {
-        return teamMember.getRole() === "Engineer"
-    });
-    console.log(engineersArray);
-    const engineerEmployeesHtml = engineersArray.map(member => `
-        <div class="card mb-4 card-hover" style="background-color: #d9b382 ;">
-            <div class="card-header" style="background-color: #b39064 ; color: aliceblue">Engineer</div>
-            <div class="card-body">
-                <h5 class="card-title">${member.name}</h5>
-                <ul class="list-group my-list">
-                <li class="list-group-item" style="background-color: beige;">ID: ${member.id}</li>
-                <li class="list-group-item" style="background-color: beige;">Email: <a
-                    href="mailto:${member.email}">${member.email}</a></li>
-                <li class="list-group-item" style="background-color: beige;">Github: ${member.github}</li>
-            </ul>
-            </div>
-        </div>
-    `
-    );
-    const engineerCard = engineerEmployeesHtml.join('');
-    return engineerCard;
-    console.log(engineerCard);
-}
-
-function internCard(teamMembers) {
-    const internsArray = teamMembers.filter((teamMember) => {
-        return teamMember.getRole() === "Intern"
-    });
-    console.log(internsArray);
-    const internsHtml = internsArray.map(intern => `
-        <div class="card mb-4 card-hover" style="background-color: #d9b382 ;">
-            <div class="card-header" style="background-color: #b39064 ; color: aliceblue">Intern</div>
-            <div class="card-body">
-                <h5 class="card-title">${intern.name}</h5>
-                <ul class="list-group my-list">
-                <li class="list-group-item" style="background-color: beige;">ID: ${intern.id}</li>
-                <li class="list-group-item" style="background-color: beige;">Email: <a
-                    href="mailto:${intern.email}">${intern.email}</a></li>
-                <li class="list-group-item" style="background-color: beige;">School: ${intern.school}</li>
-            </ul>
-            </div>
-        </div>
-    `
-    );
-    const internCard = internsHtml.join('');
-    return internCard;
-    console.log(internCard);
-}
-
-function generateHTML(teamMembers) {
-    var manager = teamMembers[0]
-    return `
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team Profile</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <script src="https://kit.fontawesome.com/a3b9a0e76d.js" crossorigin="anonymous"></script>
-</head>
-<body style="background-color: beige;">
-    <header style="background-color: #e45f56;">
-        <nav class="text-center " style="color:beige;">
-            <img src="../assets/pictures/android-chrome-192x192.png" width="35" height="35"
-                class="d-inline-block mr-2 mb-3" alt="Team profile">
-            <h1 class="d-inline-block mb-0">Team Profile<i class="fas fa-users pl-3"></i></h1>
-        </nav>
-    </header>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-10 d-flex justify-content-center ">
-                <div class="card-deck ">
-                    ${managerCard(manager)}
-                    ${engineerCard(teamMembers)}
-                    ${internCard(teamMembers)}
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
-    `
-}
