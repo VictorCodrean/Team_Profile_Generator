@@ -10,7 +10,7 @@
 - [Quick GoThrough](#Gothrough)
 - [Contributors](#Contributing)
 
-## Picture
+## Illustration
 
 ![sampleReadme](/assets/illustrations.gif)
 
