@@ -128,7 +128,7 @@ The project is under
 [![License: None](https://img.shields.io/badge/License-None-brightgreen.svg)](https://opensource.org/licenses/None)
 
 ## Directory
-* [GitHub Source](https://github.com/VictorCodrean/API_Weather_Dashboard)
+* [GitHub Source](https://github.com/VictorCodrean/Team_Profile_Generator)
 
 ## Contributing
 Victor Codrean    
